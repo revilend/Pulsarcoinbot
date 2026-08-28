@@ -913,3 +913,292 @@ body {
   color: var(--primary-cyan);
   transform: translateY(-2px);
 }
+
+/* ============ MISSING STYLES ============ */
+
+/* Rate Card (Exchange modal) */
+.rate-card {
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid rgba(0, 242, 254, 0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rate-card span { color: var(--text-muted); }
+.rate-card strong { color: var(--primary-cyan); font-size: 12px; }
+
+/* Exchange Preview */
+.exchange-preview {
+  text-align: center;
+  font-size: 13px;
+  color: var(--accent-gold);
+  padding: 8px;
+  background: rgba(255, 215, 0, 0.08);
+  border-radius: 8px;
+}
+
+.exchange-preview strong { font-size: 18px; }
+
+/* Ref Link Box */
+.ref-link-box {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ref-link-box input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--primary-cyan);
+  font-size: 12px;
+  outline: none;
+}
+
+/* Mines Controls */
+.mines-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-box input {
+  width: 80px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  outline: none;
+}
+
+.mines-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.mines-actions .btn-primary,
+.mines-actions .btn-success {
+  flex: 1;
+  text-align: center;
+}
+
+/* Spin Header */
+.spin-header {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.spin-header h2 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.spin-header p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Spin Timer */
+.spin-timer-wrap {
+  text-align: center;
+  padding: 10px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.spin-timer-wrap strong {
+  color: var(--accent-gold);
+}
+
+/* Spin Prizes List */
+.spin-prizes-list {
+  margin-top: 12px;
+}
+
+/* Airdrop Header */
+.airdrop-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.airdrop-header i {
+  font-size: 32px;
+  color: var(--primary-cyan);
+}
+
+.airdrop-header h3 {
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.airdrop-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.airdrop-info p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Leaderboard Header */
+.leaderboard-header {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.leaderboard-header i.rank-crown {
+  font-size: 36px;
+  color: var(--accent-gold);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.leaderboard-header h2 {
+  font-size: 17px;
+}
+
+.leaderboard-header p {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.my-rank-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.my-rank-info strong {
+  font-size: 13px;
+}
+
+.my-rank-info span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Streak Title & Badge */
+.streak-title {
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.streak-title i {
+  color: var(--accent-gold);
+}
+
+.streak-badge {
+  font-size: 12px;
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+
+/* Chat Window Modal */
+.chat-window {
+  max-width: 400px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-window .chat-messages {
+  flex: 1;
+  height: auto;
+  min-height: 200px;
+}
+
+/* Input focus states */
+.modal-body input:focus,
+.chat-input-bar input:focus {
+  border-color: var(--primary-cyan);
+  box-shadow: 0 0 8px rgba(0, 242, 254, 0.2);
+}
+
+/* Button hover effects */
+.btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+}
+
+.btn-buy:hover {
+  opacity: 0.85;
+}
+
+.btn-claim-daily:hover {
+  opacity: 0.9;
+}
+
+.btn-sm:hover {
+  background: rgba(0, 242, 254, 0.25);
+}
+
+.spin-center-btn:hover {
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+}
+
+/* Active skin glow */
+.active-skin {
+  border-color: var(--primary-cyan) !important;
+  box-shadow: 0 0 20px rgba(0, 242, 254, 0.25) !important;
+}
+
+/* Mines cell hover */
+.mine-cell:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Rank item hover */
+.rank-item:hover {
+  border-color: rgba(0, 242, 254, 0.2);
+}
+
+/* Menu item hover */
+.menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Game selector hover */
+.game-selector-card:hover {
+  border-color: var(--primary-pink);
+}
+
+/* Card item hover */
+.card-item:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Quasar badge pulse */
+.quasar-badge:hover {
+  box-shadow: 0 0 12px rgba(255, 0, 122, 0.3);
+}

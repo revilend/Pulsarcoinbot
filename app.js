@@ -1,6 +1,6 @@
 // ============ PULSAR MINI APP — FULL BACKEND INTEGRATION ============
 
-const API_BASE = '';  // Same origin
+const API_BASE = 'https://pulsarcoinbot.onrender.com';  // Bot server
 
 const tg = window.Telegram?.WebApp;
 if (tg) {
