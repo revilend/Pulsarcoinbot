@@ -20,7 +20,7 @@ bot = Bot(token=config.BOT_TOKEN)
 dp = Dispatcher()
 dp.include_router(admin_router)
 
-# 1. Render Ping Web Server
+# 1. Render Ping Web Server + Static Files
 async def handle_ping(request):
     return web.Response(text="Pulsar Bot is running alive!", status=200)
 
@@ -28,6 +28,11 @@ async def start_web_server():
     app = web.Application()
     app.router.add_get("/", handle_ping)
     app.router.add_get("/ping", handle_ping)
+    
+    # Webapp fayllarini xizmat qilish
+    webapp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
+    if os.path.exists(os.path.join(webapp_dir, "index.html")):
+        app.router.add_static("/", webapp_dir, show_index=True, name="webapp")
     
     port = int(os.environ.get("PORT", 8080))
     runner = web.AppRunner(app)
