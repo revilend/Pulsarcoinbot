@@ -84,8 +84,7 @@ def get_main_game_keyboard() -> InlineKeyboardMarkup:
                 )
             ],
             [
-                InlineKeyboardButton(text="👥 Do'stlarni taklif qilish", callback_data="referrals"),
-                InlineKeyboardButton(text="📢 Rasmiy Kanal", url="https://t.me/pulsar_news")
+                InlineKeyboardButton(text="👥 Do'stlarni taklif qilish", callback_data="referrals")
             ]
         ]
     )
