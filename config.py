@@ -7,7 +7,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "BOT_TOKENINGIZNI_BU_YERGA_YOZING")
 WEBAPP_URL = os.getenv("WEBAPP_URL", "https://revilend.github.io/Pulsarcoinbot/")
 
 # Render tashqi manzili (Self-ping uchun)
-RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL", "https://pulsar-tap-bot.onrender.com")
+RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL", "https://pulsarcoinbot.onrender.com")
 
 # Adminlarning Telegram ID raqamlari
 ADMIN_IDS = [int(i.strip()) for i in os.getenv("ADMIN_IDS", "123456789").split(",") if i.strip().isdigit()]
