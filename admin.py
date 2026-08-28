@@ -22,6 +22,9 @@ class AdminStates(StatesGroup):
     search_user = State()
     edit_user_balance = State()
     restore_backup_file = State()
+    add_channel_id = State()
+    add_channel_name = State()
+    add_channel_url = State()
 
 def is_admin(user_id: int) -> bool:
     return user_id in config.ADMIN_IDS
@@ -38,8 +41,11 @@ def get_admin_main_kb() -> InlineKeyboardMarkup:
                 InlineKeyboardButton(text="🎁 Yangi Promo-kod", callback_data="admin_create_promo")
             ],
             [
-                InlineKeyboardButton(text="📥 Baza Backup (Yuklab olish)", callback_data="admin_backup_download"),
-                InlineKeyboardButton(text="📤 Bazani Tiklash (Import)", callback_data="admin_restore_prompt")
+                InlineKeyboardButton(text="📢 Kanallar", callback_data="admin_channels"),
+                InlineKeyboardButton(text="📥 Baza Backup", callback_data="admin_backup_download")
+            ],
+            [
+                InlineKeyboardButton(text="📤 Bazani Tiklash", callback_data="admin_restore_prompt")
             ],
             [
                 InlineKeyboardButton(text="◀️ Panelni Yopish", callback_data="admin_close")
@@ -319,3 +325,209 @@ async def admin_back(callback: CallbackQuery):
 @admin_router.callback_query(F.data == "admin_close")
 async def admin_close(callback: CallbackQuery):
     await callback.message.delete()
+
+# ============ KANALLARNI BOSHQARISH ============
+
+@admin_router.callback_query(F.data == "admin_channels")
+async def process_admin_channels(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+
+    channels = await db.get_all_channels()
+    channel_count = len(channels)
+
+    text = (
+        "📢 **Majburiy Kanallar Boshqaruvi**\n\n"
+        f"Jami kanallar: **{channel_count}** ta\n\n"
+        "Quyidagi kanallar foydalanuvchilardan majburiy obuna talab qiladi:\n"
+    )
+
+    if channels:
+        for i, ch in enumerate(channels, start=1):
+            text += f"\n{i}. **{ch['name']}**\n   🆔 `{ch['channel_id']}`\n   🔗 {ch['url']}"
+    else:
+        text += "\n\n⚠️ Hozircha kanallar yo'q. Foydalanuvchilardan obuna talab qilinmaydi."
+
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="➕ Kanal Qo'shish", callback_data="admin_add_channel"),
+            InlineKeyboardButton(text="➖ Kanal O'chirish", callback_data="admin_remove_channel_list")
+        ],
+        [InlineKeyboardButton(text="◀️ Orqaga", callback_data="admin_back")]
+    ])
+    await callback.message.edit_text(text, reply_markup=kb, parse_mode="Markdown")
+
+# Kanal qo'shish — 1-qadam: channel_id
+@admin_router.callback_query(F.data == "admin_add_channel")
+async def process_add_channel_step1(callback: CallbackQuery, state: FSMContext):
+    if not is_admin(callback.from_user.id): return
+
+    await state.set_state(AdminStates.add_channel_id)
+    await callback.message.edit_text(
+        "➕ **Yangi Kanal Qo'shish — 1/3**\n\n"
+        "Kanalning **username** (masalan: `@pulsar_news`) yoki **channel ID** (masalan: `-1001234567890`) ni yuboring:\n\n"
+        "💡 ID ni olish uchun: @userinfobot ga kanal xabarini forward qiling.\n\n"
+        "Bekor qilish uchun /cancel yozing.",
+        parse_mode="Markdown"
+    )
+
+@admin_router.message(AdminStates.add_channel_id)
+async def process_add_channel_step2(message: Message, state: FSMContext):
+    if message.text == "/cancel":
+        await state.clear()
+        await message.answer("❌ Bekor qilindi.", reply_markup=get_admin_main_kb())
+        return
+
+    channel_id = message.text.strip()
+    await state.update_data(channel_id=channel_id)
+    await state.set_state(AdminStates.add_channel_name)
+    await message.answer(
+        f"➕ **Yangi Kanal Qo'shish — 2/3**\n\n"
+        f"Kanal ID: `{channel_id}`\n\n"
+        "Endi kanalning **ko'rinish nomini** yuboring (masalan: `Pulsar Rasmiy Kanal`)\n\n"
+        "Bekor qilish uchun /cancel yozing.",
+        parse_mode="Markdown"
+    )
+
+@admin_router.message(AdminStates.add_channel_name)
+async def process_add_channel_step3(message: Message, state: FSMContext):
+    if message.text == "/cancel":
+        await state.clear()
+        await message.answer("❌ Bekor qilindi.", reply_markup=get_admin_main_kb())
+        return
+
+    channel_name = message.text.strip()
+    await state.update_data(channel_name=channel_name)
+    await state.set_state(AdminStates.add_channel_url)
+    await message.answer(
+        f"➕ **Yangi Kanal Qo'shish — 3/3**\n\n"
+        f"Kanal: **{channel_name}**\n\n"
+        "Endi kanalning **havolasini** (URL) yuboring:\n"
+        "Masalan: `https://t.me/pulsar_news`\n\n"
+        "Bekor qilish uchun /cancel yozing.",
+        parse_mode="Markdown"
+    )
+
+@admin_router.message(AdminStates.add_channel_url)
+async def process_add_channel_save(message: Message, state: FSMContext):
+    if message.text == "/cancel":
+        await state.clear()
+        await message.answer("❌ Bekor qilindi.", reply_markup=get_admin_main_kb())
+        return
+
+    channel_url = message.text.strip()
+    data = await state.get_data()
+    channel_id = data.get("channel_id")
+    channel_name = data.get("channel_name")
+
+    await state.clear()
+
+    if not channel_url.startswith("http"):
+        await message.answer(
+            "⚠️ Noto'g'ri URL formati! URL `https://` bilan boshlanishi kerak.\n"
+            "Qaytadan boshlash uchun /admin ni bosing.",
+            reply_markup=get_admin_main_kb()
+        )
+        return
+
+    await db.add_channel(channel_id, channel_name, channel_url)
+    await message.answer(
+        f"✅ **Kanal muvaffaqiyatli qo'shildi!**\n\n"
+        f"🆔 ID: `{channel_id}`\n"
+        f"📛 Nom: **{channel_name}**\n"
+        f"🔗 Havola: {channel_url}\n\n"
+        "Endi foydalanuvchilar ushbu kanalga a'zo bo'lishi shart.",
+        reply_markup=get_admin_main_kb(),
+        parse_mode="Markdown"
+    )
+
+# Kanal o'chirish — ro'yxat
+@admin_router.callback_query(F.data == "admin_remove_channel_list")
+async def process_remove_channel_list(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+
+    channels = await db.get_all_channels()
+    if not channels:
+        await callback.message.edit_text(
+            "⚠️ O'chiriladigan kanallar yo'q.\n\n"
+            "Qo'shish uchun 'Kanallar' bo'limiga qayting.",
+            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="◀️ Orqaga", callback_data="admin_channels")]
+            ])
+        )
+        return
+
+    text = "➖ **Kanalni O'chirish**\n\nO'chirmoqchi bo'lgan kanalni tanlang:\n\n"
+    buttons = []
+    for ch in channels:
+        buttons.append([InlineKeyboardButton(
+            text=f"🗑 {ch['name']} ({ch['channel_id']})",
+            callback_data=f"admin_rm_ch_{ch['channel_id']}"
+        )])
+    buttons.append([InlineKeyboardButton(text="◀️ Orqaga", callback_data="admin_channels")])
+
+    await callback.message.edit_text(text, reply_markup=InlineKeyboardMarkup(inline_keyboard=buttons), parse_mode="Markdown")
+
+# Kanal o'chirish — tasdiqlash
+@admin_router.callback_query(F.data.startswith("admin_rm_ch_"))
+async def process_remove_channel_confirm(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+
+    channel_id = callback.data.replace("admin_rm_ch_", "")
+    channel = await db.get_channel(channel_id)
+
+    if not channel:
+        await callback.answer("❌ Kanal topilmadi!", show_alert=True)
+        return
+
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="✅ Ha, o'chirish", callback_data=f"admin_rm_ch_yes_{channel_id}"),
+            InlineKeyboardButton(text="❌ Yo'q, bekor", callback_data="admin_channels")
+        ]
+    ])
+    await callback.message.edit_text(
+        f"⚠️ **O'chirishni tasdiqlang**\n\n"
+        f"Kanal: **{channel['name']}**\n"
+        f"ID: `{channel['channel_id']}\n"
+        f"Havola: {channel['url']}`\n\n"
+        "Ushbu kanal obuna talablaridan o'chiriladi.\n"
+        "Davom etasizmi?",
+        reply_markup=kb, parse_mode="Markdown"
+    )
+
+# Kanal o'chirish — amalga oshirish
+@admin_router.callback_query(F.data.startswith("admin_rm_ch_yes_"))
+async def process_remove_channel_execute(callback: CallbackQuery):
+    if not is_admin(callback.from_user.id): return
+
+    channel_id = callback.data.replace("admin_rm_ch_yes_", "")
+    channel = await db.get_channel(channel_id)
+    channel_name = channel['name'] if channel else channel_id
+
+    await db.remove_channel(channel_id)
+    await callback.answer(f"✅ '{channel_name}' kanali o'chirildi!", show_alert=True)
+
+    # Kanallar ro'yxatiga qaytish
+    channels = await db.get_all_channels()
+    channel_count = len(channels)
+
+    text = (
+        "📢 **Majburiy Kanallar Boshqaruvi**\n\n"
+        f"Jami kanallar: **{channel_count}** ta\n\n"
+        "Quyidagi kanallar foydalanuvchilardan majburiy obuna talab qiladi:\n"
+    )
+
+    if channels:
+        for i, ch in enumerate(channels, start=1):
+            text += f"\n{i}. **{ch['name']}**\n   🆔 `{ch['channel_id']}`\n   🔗 {ch['url']}"
+    else:
+        text += "\n\n⚠️ Hozircha kanallar yo'q. Foydalanuvchilardan obuna talab qilinmaydi."
+
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="➕ Kanal Qo'shish", callback_data="admin_add_channel"),
+            InlineKeyboardButton(text="➖ Kanal O'chirish", callback_data="admin_remove_channel_list")
+        ],
+        [InlineKeyboardButton(text="◀️ Orqaga", callback_data="admin_back")]
+    ])
+    await callback.message.edit_text(text, reply_markup=kb, parse_mode="Markdown")

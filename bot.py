@@ -53,19 +53,23 @@ async def keep_alive_self_ping():
 
 # 3. Kanallarga a'zolikni tekshirish
 async def check_user_subscriptions(user_id: int) -> bool:
-    for channel in config.CHANNELS:
+    channels = await db.get_all_channels()
+    if not channels:
+        return True  # Kanal yo'q — tekshirish shart emas
+    for channel in channels:
         try:
-            member = await bot.get_chat_member(chat_id=channel["id"], user_id=user_id)
+            member = await bot.get_chat_member(chat_id=channel["channel_id"], user_id=user_id)
             if member.status in [ChatMemberStatus.LEFT, ChatMemberStatus.KICKED]:
                 return False
         except Exception as e:
-            logging.error(f"Kanal tekshirish xatoligi ({channel['id']}): {e}")
+            logging.error(f"Kanal tekshirish xatoligi ({channel['channel_id']}): {e}")
             return False
     return True
 
-def get_subscription_keyboard() -> InlineKeyboardMarkup:
+async def get_subscription_keyboard() -> InlineKeyboardMarkup:
+    channels = await db.get_all_channels()
     buttons = []
-    for i, ch in enumerate(config.CHANNELS, start=1):
+    for i, ch in enumerate(channels, start=1):
         buttons.append([InlineKeyboardButton(text=f"📢 {ch['name']} #{i}", url=ch["url"])])
     buttons.append([InlineKeyboardButton(text="✅ Tekshirish (Verify)", callback_data="verify_subs")])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
@@ -123,7 +127,8 @@ async def cmd_start(message: Message, command: CommandObject):
             "O'yinni boshlashdan oldin homiylarimizning majburiy Telegram kanallariga a'zo bo'lishingiz shart:\n\n"
             "Kanallarga a'zo bo'lib, pastdagi **'Tekshirish'** tugmasini bosing!"
         )
-        await message.answer(text, reply_markup=get_subscription_keyboard(), parse_mode="Markdown")
+        keyboard = await get_subscription_keyboard()
+        await message.answer(text, reply_markup=keyboard, parse_mode="Markdown")
     else:
         await db.set_user_verified(user_id)
         user = await db.get_user(user_id)

@@ -31,6 +31,13 @@ async def init_db():
                 used_count INTEGER DEFAULT 0
             )
         """)
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS channels (
+                channel_id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                url TEXT NOT NULL
+            )
+        """)
         await db.commit()
 
 async def get_user(user_id: int):
@@ -146,3 +153,42 @@ async def create_promo_code(code: str, reward_plsr: int, max_uses: int):
             VALUES (?, ?, ?, 0)
         """, (code.upper(), reward_plsr, max_uses))
         await db.commit()
+
+# ============ CHANNELS (Kanallar) ============
+
+async def get_all_channels() -> list[dict]:
+    """Barcha kanallarni olish"""
+    async with aiosqlite.connect(DB_NAME) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM channels") as cursor:
+            rows = await cursor.fetchall()
+            return [dict(row) for row in rows]
+
+async def add_channel(channel_id: str, name: str, url: str):
+    """Kanal qo'shish"""
+    async with aiosqlite.connect(DB_NAME) as db:
+        await db.execute("""
+            INSERT OR REPLACE INTO channels (channel_id, name, url)
+            VALUES (?, ?, ?)
+        """, (channel_id, name, url))
+        await db.commit()
+
+async def remove_channel(channel_id: str):
+    """Kanalni o'chirish"""
+    async with aiosqlite.connect(DB_NAME) as db:
+        await db.execute("DELETE FROM channels WHERE channel_id = ?", (channel_id,))
+        await db.commit()
+
+async def get_channel(channel_id: str):
+    """Bitta kanalni olish"""
+    async with aiosqlite.connect(DB_NAME) as db:
+        db.row_factory = aiosqlite.Row
+        async with db.execute("SELECT * FROM channels WHERE channel_id = ?", (channel_id,)) as cursor:
+            return await cursor.fetchone()
+
+async def get_channel_count() -> int:
+    """Kanallar sonini olish"""
+    async with aiosqlite.connect(DB_NAME) as db:
+        async with db.execute("SELECT COUNT(*) FROM channels") as cursor:
+            res = await cursor.fetchone()
+            return res[0] if res else 0

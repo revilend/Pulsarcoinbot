@@ -12,20 +12,7 @@ RENDER_EXTERNAL_URL = os.getenv("RENDER_EXTERNAL_URL", "https://pulsar-tap-bot.o
 # Adminlarning Telegram ID raqamlari (@userinfobot orqali olishingiz mumkin)
 ADMIN_IDS = [int(i.strip()) for i in os.getenv("ADMIN_IDS", "123456789").split(",") if i.strip().isdigit()]
 
-# Majburiy a'zo bo'lishi kerak bo'lgan kanallar
-# Diqqat: Bot ushbu kanallarda ADMIN bo'lishi shart!
-CHANNELS = [
-    {
-        "id": "@pulsar_news",
-        "name": "Pulsar Rasmiy Kanal",
-        "url": "https://t.me/pulsar_news"
-    },
-    {
-        "id": "@pulsar_community",
-        "name": "Pulsar Hamjamiyati",
-        "url": "https://t.me/pulsar_community"
-    }
-]
+# Kanallar endi database'da saqlanadi — admin panel orqali boshqariladi
 
 # Bonuslar miqdori ($PLSR)
 START_BONUS = 500
