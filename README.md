@@ -1,32 +1,60 @@
-# ⚡ Pulsar Tap-to-Earn Telegram Bot & Mini App
+# 🪐 Pulsar ($PLSR) — Telegram Mini App (Web App Frontend)
 
-Ushbu loyiha **Telegram Bot** va **Telegram Mini App (TWA)** ekotizimi uchun to'liq tayyorlangan starter paketdir.
+Bu loyiha **Pulsar Telegram Mini App** uchun to'liq mustaqil, ultra-zamonaviy kosmik dizayndagi veb-ilova (Frontend) paketidir.
 
-## 🚀 Loyiha tarkibi:
-- `bot.py` — Asosiy bot fayli (aiogram 3.x, obuna tekshiruvi, aiohttp web-server va Keep-Alive self-ping).
-- `admin.py` — Admin paneli (statistika, barcha o'yinchilarga xabar tarqatish/rassilka, promo-kod yaratish).
-- `database.py` — Asinxron SQLite ma'lumotlar bazasi.
-- `config.py` — Bot tokeni, homiy kanallar va bonuslar sozlamasi.
-- `webapp/index.html` — Mini App (TWA) kosmik uslubdagi Tap-to-Earn frontend qismi.
-- `requirements.txt`, `Procfile`, `runtime.txt` — Render va GitHub uchun tayyor deploy konfiguratsiyasi.
+---
 
-## 🛠 GitHub va Renderga joylash bo'yicha qo'llanma:
+## 🌟 Ichidagi barcha modullar:
+1. **🏠 Asosiy (Tap-to-Earn):**
+   - Markaziy aylanuvchi va pulsatsiyalanuvchi Pulsar yadrosi.
+   - Multi-touch (bir nechta barmoq bilan bosish) va Web Audio API asosidagi sintezlangan tovush effektlari.
+   - Combo Streak ko'paytirgichlari (`x1.0`, `x2.0`, `x3.0 SUPER TAP`).
+   - Energiya sarfi va avtomatik tiklanish tizimi.
+   - Darajalar (Level 1–20) va XP progress shkalasi.
+   - Soatlik avto-daromad (passiv mining).
 
-1. **GitHub'ga yuklash:**
-   - Ushbu fayllarni yangi GitHub repository'ga yuklang (`git push`).
+2. **🛒 Do'kon (Shop & Mining):**
+   - **Mining generatorlari:** Kvant Kollektori, Stellar Reaktor, Kosmik Turbina, Dyson Radiatori.
+   - **Mavzular (Skins):** Standart, Oltin Imperium (x1.5), Kiber Platinum (x2.2), Kamalakli Nova (x2.0).
+   - **Airdrop:** Qolgan vaqtni ko'rsatuvchi jonli taymer (Countdown) va TON hamyon ulash interfeysi.
 
-2. **Render.com da yangi Web Service ochish:**
-   - [Render.com](https://render.com) ga kiring va **New +** -> **Web Service** ni tanlang.
-   - GitHub repository'ingizni ulang.
-   - Sozlamalar:
-     - **Runtime:** `Python 3`
-     - **Build Command:** `pip install -r requirements.txt`
-     - **Start Command:** `python bot.py`
-     - **Environment Variables:**
-       - `BOT_TOKEN` = Sizning bot tokeningiz
-       - `ADMIN_IDS` = Sizning Telegram ID raqamingiz
-       - `RENDER_EXTERNAL_URL` = Render beradigan havola (masalan: `https://pulsar-tap-bot.onrender.com`)
-       - `WEBAPP_URL` = Mini App joylangan havola
+3. **📋 Vazifalar (Tasks & Daily Streak):**
+   - 7 kunlik ketma-ket kirish bonusi (Daily Check-in Streak).
+   - Telegram kanal va hamjamiyat topshiriqlari.
 
-3. **Auto-Ping (UptimeRobot):**
-   - [UptimeRobot.com](https://uptimerobot.com) saytida yangi HTTP monitor oching va `https://sizning-app.onrender.com/ping` manzilini har 5 daqiqaga qo'ying.
+4. **🎡 Omad Barabani (Wheel of Fortune / Spin):**
+   - HTML5 Canvas asosidagi aylanuvchi interaktiv baraban.
+   - Jackpot, Quasar kristallari, energiya va $PLSR sovrinlari.
+
+5. **🎮 Mini O'yinlar:**
+   - **Bomba va Xazina (Minesweeper):** 5x5 maydonda kristallarni topib ko'paytirgich yutish o'yini.
+
+6. **🏆 Reyting (Leaderboard):**
+   - Eng kuchli o'yinchilar ro'yxati va sizning shaxsiy o'rningiz (sticky rank bar).
+
+7. **👤 Profil, P2P & Live Chat:**
+   - **P2P Transfer:** O'yinchilar o'rtasida kristall o'tkazish modali.
+   - **Tanga Almashtirish (Exchange):** $PLSR tangalarini Quasarga konvertatsiya qilish.
+   - **Promo Kod:** `PULSAR2026` kodi bilan bonus olish.
+   - **Hamkorlik & Referal:** Do'stlarga havola ulashish.
+   - **Global Jonli Chat:** Xabarlar oqimi va yozish.
+
+---
+
+## 🚀 Qayerga bepul joylash (Deploy) qilish mumkin?
+
+Ushbu veb-ilovaning barcha fayllari (HTML/CSS/JS) statik bo'lgani uchun uni quyidagi bepul xostinglarga 1 daqiqada joylashingiz mumkin:
+
+1. **Vercel (Tavsiya etiladi):**
+   - [vercel.com](https://vercel.com) ga kiring.
+   - Yangi loyiha ochib, ushbu papkani yuklang yoki GitHub repository'ni ulang.
+   - Vercel sizga bepul `https://sizning-loyiha.vercel.app` havolasini beradi.
+
+2. **GitHub Pages:**
+   - GitHub repository sozlamalaridan (**Settings -> Pages**) `main` branch'ni tanlab yoqing.
+   - `https://username.github.io/repository-nomi/` manzili tayyor bo'ladi.
+
+3. **Cloudflare Pages / Netlify:**
+   - Istalgan statik xostingga fayllarni drag-and-drop qilib joylashingiz mumkin.
+
+Olingan HTTPS havolani Telegram botdagi `WEBAPP_URL` sozlamasiga kiritishingiz kifoya!
