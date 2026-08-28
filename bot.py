@@ -28,26 +28,30 @@ async def handle_ping(request):
 
 async def handle_index(request):
     index_path = os.path.join(BASE_DIR, "index.html")
-    logging.info(f"Index qidirilmoqda: {index_path}, mavjud: {os.path.exists(index_path)}")
     if os.path.exists(index_path):
         return web.FileResponse(index_path, content_type="text/html")
     return web.Response(text="Pulsar Bot is running alive!", status=200)
 
+async def handle_css(request):
+    css_path = os.path.join(BASE_DIR, "style.css")
+    if os.path.exists(css_path):
+        return web.FileResponse(css_path, content_type="text/css")
+    return web.Response(status=404)
+
+async def handle_js(request):
+    js_path = os.path.join(BASE_DIR, "app.js")
+    if os.path.exists(js_path):
+        return web.FileResponse(js_path, content_type="application/javascript")
+    return web.Response(status=404)
+
 async def start_web_server():
     app = web.Application()
     
-    # Asosiy route-lar (avval qo'shish kerak!)
+    # Route-lar
     app.router.add_get("/ping", handle_ping)
+    app.router.add_get("/style.css", handle_css)
+    app.router.add_get("/app.js", handle_js)
     app.router.add_get("/", handle_index)
-    
-    # Static fayllar (css, js)
-    css_path = os.path.join(BASE_DIR, "style.css")
-    js_path = os.path.join(BASE_DIR, "app.js")
-    
-    if os.path.exists(css_path):
-        app.router.add_get("/style.css", lambda r: web.FileResponse(css_path, content_type="text/css"))
-    if os.path.exists(js_path):
-        app.router.add_get("/app.js", lambda r: web.FileResponse(js_path, content_type="application/javascript"))
     
     port = int(os.environ.get("PORT", 8080))
     runner = web.AppRunner(app)
@@ -55,10 +59,6 @@ async def start_web_server():
     site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
     logging.info(f"Web server {port}-portda ishga tushdi.")
-    logging.info(f"Base dir: {BASE_DIR}")
-    logging.info(f"Index.html mavjud: {os.path.exists(os.path.join(BASE_DIR, 'index.html'))}")
-    logging.info(f"style.css mavjud: {os.path.exists(css_path)}")
-    logging.info(f"app.js mavjud: {os.path.exists(js_path)}")
 
 # 2. Render Keep-Alive Self Ping Task
 async def keep_alive_self_ping():
