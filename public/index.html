@@ -4,9 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Pulsar ($PLSR) — Telegram Mini App</title>
-  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -30,7 +28,7 @@
 
     <!-- Main Screens Container -->
     <main class="content-area">
-      <!-- 1. ASOSIY (TAP TO EARN) SCREEN -->
+      <!-- 1. ASOSIY (TAP TO EARN) -->
       <section id="tab-asosiy" class="screen-tab active">
         <div class="stats-overview">
           <div class="level-progress-wrap">
@@ -42,25 +40,21 @@
               <div class="progress-fill" id="xp-bar" style="width: 0%;"></div>
             </div>
           </div>
-
           <div class="balance-display">
             <div class="balance-sub">JORIY BALANS</div>
             <div class="balance-main">
               <span class="coin-icon">⚡</span>
-              <span id="main-balance">500</span>
+              <span id="main-balance">0</span>
               <span class="currency-label">$PLSR</span>
             </div>
             <div class="passive-income-badge">
               <i class="fa-solid fa-bolt-lightning"></i> Avto Daromad: <span id="passive-rate">+0</span>/soat
             </div>
           </div>
-
           <div class="combo-indicator" id="combo-badge">
             <i class="fa-solid fa-fire"></i> COMBO STREAK: <span id="combo-count">0</span> (<span id="combo-mult">x1.0 NORMAL</span>)
           </div>
         </div>
-
-        <!-- Central Tap Core -->
         <div class="tap-zone" id="tap-zone">
           <div class="pulsar-aura" id="pulsar-aura"></div>
           <div class="pulsar-core" id="pulsar-core">
@@ -71,8 +65,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Energy Bar -->
         <div class="energy-panel">
           <div class="energy-meta">
             <span><i class="fa-solid fa-battery-half"></i> Energiya</span>
@@ -84,31 +76,21 @@
         </div>
       </section>
 
-      <!-- 2. DO'KON & MINING SCREEN -->
+      <!-- 2. DO'KON & MINING -->
       <section id="tab-dokan" class="screen-tab">
         <div class="sub-nav">
           <button class="sub-btn active" onclick="switchShopSub('mining')"><i class="fa-solid fa-microchip"></i> Mining</button>
           <button class="sub-btn" onclick="switchShopSub('mavzular')"><i class="fa-solid fa-palette"></i> Mavzular</button>
           <button class="sub-btn" onclick="switchShopSub('airdrop')"><i class="fa-solid fa-parachute-box"></i> Airdrop</button>
         </div>
-
-        <!-- Mining Cards -->
         <div id="shop-mining" class="shop-content-section active">
           <div class="section-title">SOATLIK PASSIV DAROMAD GENERATORLARI</div>
-          <div class="cards-grid" id="mining-cards-container">
-            <!-- Dynamic Mining Cards injected by JS -->
-          </div>
+          <div class="cards-grid" id="mining-cards-container"></div>
         </div>
-
-        <!-- Skins / Mavzular -->
         <div id="shop-mavzular" class="shop-content-section">
           <div class="section-title">PULSAR YADRO MAVZULARI (SKINLAR)</div>
-          <div class="cards-grid" id="skins-cards-container">
-            <!-- Dynamic Skin Cards injected by JS -->
-          </div>
+          <div class="cards-grid" id="skins-cards-container"></div>
         </div>
-
-        <!-- Airdrop Section -->
         <div id="shop-airdrop" class="shop-content-section">
           <div class="airdrop-card">
             <div class="airdrop-header">
@@ -116,13 +98,13 @@
               <h3>NAVBATDAGI AIRDROP TAQSIMOTI</h3>
             </div>
             <div class="countdown-timer">
-              <div class="time-block"><span id="days">09</span><small>KUN</small></div>
+              <div class="time-block"><span id="days">00</span><small>KUN</small></div>
               <div class="time-divider">:</div>
-              <div class="time-block"><span id="hours">14</span><small>SOAT</small></div>
+              <div class="time-block"><span id="hours">00</span><small>SOAT</small></div>
               <div class="time-divider">:</div>
-              <div class="time-block"><span id="minutes">32</span><small>DAQ</small></div>
+              <div class="time-block"><span id="minutes">00</span><small>DAQ</small></div>
               <div class="time-divider">:</div>
-              <div class="time-block"><span id="seconds">45</span><small>SON</small></div>
+              <div class="time-block"><span id="seconds">00</span><small>SON</small></div>
             </div>
             <div class="airdrop-info">
               <p>Airdrop har oyda o'tkaziladi. O'yinchilarning soatlik daromadi va to'plangan Quasar kristallari asosida taqsimlanadi.</p>
@@ -132,32 +114,26 @@
         </div>
       </section>
 
-      <!-- 3. VAZIFALAR SCREEN -->
+      <!-- 3. VAZIFALAR -->
       <section id="tab-vazifalar" class="screen-tab">
         <div class="sub-nav">
           <button class="sub-btn active" onclick="switchTaskSub('daily')"><i class="fa-solid fa-calendar-check"></i> Kunlik</button>
           <button class="sub-btn" onclick="switchTaskSub('missions')"><i class="fa-solid fa-list-check"></i> Vazifalar</button>
         </div>
-
         <div id="task-daily" class="task-content-section active">
           <div class="streak-header">
             <div class="streak-title"><i class="fa-solid fa-gift"></i> Kunlik Kirish Sovg'asi</div>
-            <div class="streak-badge">🔥 Ketma-ket: <span id="streak-day-count">1</span>-kun</div>
+            <div class="streak-badge">🔥 Ketma-ket: <span id="streak-day-count">0</span>-kun</div>
           </div>
-          <div class="streak-grid" id="streak-grid-container">
-            <!-- 7 Days Streak Cards -->
-          </div>
+          <div class="streak-grid" id="streak-grid-container"></div>
           <button class="btn-claim-daily" id="btn-claim-streak" onclick="claimDailyStreak()">BUGUNGI MUKOFOTNI OLISH</button>
         </div>
-
         <div id="task-missions" class="task-content-section">
-          <div class="missions-list" id="missions-container">
-            <!-- Dynamic Social Tasks -->
-          </div>
+          <div class="missions-list" id="missions-container"></div>
         </div>
       </section>
 
-      <!-- 4. MINI GAMES SCREEN -->
+      <!-- 4. MINI GAMES -->
       <section id="tab-minigames" class="screen-tab">
         <div class="section-title">KOSMIK MINI O'YINLAR</div>
         <div class="game-selector-card" onclick="openMinesGame()">
@@ -168,8 +144,6 @@
           </div>
           <button class="btn-sm"><i class="fa-solid fa-play"></i> O'ynash</button>
         </div>
-
-        <!-- Minesweeper Modal/Game View -->
         <div id="mines-modal" class="modal-overlay">
           <div class="modal-window">
             <div class="modal-header">
@@ -180,9 +154,7 @@
               <div class="stat-box">Tikish: <input type="number" id="mines-bet" value="500" min="100" step="100"> $PLSR</div>
               <div class="stat-box">Ko'paytirgich: <span id="mines-mult">x1.00</span></div>
             </div>
-            <div class="mines-grid" id="mines-grid">
-              <!-- 25 Cells -->
-            </div>
+            <div class="mines-grid" id="mines-grid"></div>
             <div class="mines-actions">
               <button class="btn-primary" id="btn-start-mines" onclick="startMinesGame()">O'yinni Boshlash</button>
               <button class="btn-success" id="btn-cashout-mines" onclick="cashoutMines()" style="display:none;">Yutuqni Olish</button>
@@ -191,61 +163,53 @@
         </div>
       </section>
 
-      <!-- 5. SPIN (OMAD BARABANI) SCREEN -->
+      <!-- 5. SPIN (OMAD BARABANI) -->
       <section id="tab-spin" class="screen-tab">
         <div class="spin-header">
           <h2><i class="fa-solid fa-dharmachakra"></i> OMAD BARABANI</h2>
           <p>Har 4 soatda omadingizni mutlaqo bepul sinab ko'ring!</p>
         </div>
-
         <div class="wheel-container">
           <div class="wheel-pointer">▼</div>
           <canvas id="wheel-canvas" width="320" height="320"></canvas>
           <button class="spin-center-btn" id="spin-btn" onclick="spinWheel()">SPIN<br>GO!</button>
         </div>
-
         <div class="spin-timer-wrap">
-          <span id="spin-cooldown-text">Keyingi bepul spin: <strong id="spin-timer">TAYYOR!</strong></span>
+          <span id="spin-cooldown-text">Keyingi bepul spin: <strong id="spin-timer">YUKLANMOQDA...</strong></span>
         </div>
-
         <div class="spin-prizes-list">
           <div class="section-title">SOVRINLAR RO'YXATI</div>
           <div class="prizes-grid">
-            <div class="prize-pill">⚡ 5,000 PLSR</div>
-            <div class="prize-pill">⚡ 15,000 PLSR</div>
-            <div class="prize-pill">⚡ 50,000 PLSR</div>
+            <div class="prize-pill">⚡ 5,000 $PLSR</div>
+            <div class="prize-pill">⚡ 15,000 $PLSR</div>
+            <div class="prize-pill">⚡ 50,000 $PLSR</div>
             <div class="prize-pill jackpot">👑 100k JACKPOT</div>
             <div class="prize-pill">💎 5 Quasar</div>
             <div class="prize-pill">🔋 To'liq Energiya</div>
             <div class="prize-pill">⭐ +500 XP</div>
-            <div class="prize-pill">⚡ 25,000 PLSR</div>
+            <div class="prize-pill">⚡ 25,000 $PLSR</div>
           </div>
         </div>
       </section>
 
-      <!-- 6. REYTING (LEADERBOARD) SCREEN -->
+      <!-- 6. REYTING -->
       <section id="tab-reyting" class="screen-tab">
         <div class="leaderboard-header">
           <i class="fa-solid fa-crown rank-crown"></i>
           <h2>Pulsar Galaktikasi Reytingi</h2>
           <p>Eng kuchli o'yinchilar o'rtasida raqobat</p>
         </div>
-
-        <div class="leaderboard-list" id="leaderboard-container">
-          <!-- Leaderboard items -->
-        </div>
-
-        <!-- Sticky My Rank -->
+        <div class="leaderboard-list" id="leaderboard-container"></div>
         <div class="my-rank-sticky">
-          <div class="my-rank-num">#42</div>
+          <div class="my-rank-num">#—</div>
           <div class="my-rank-info">
-            <strong>Siz (O'yinchi)</strong>
-            <span>Balans: <span id="my-rank-bal">500</span> $PLSR</span>
+            <strong>Siz</strong>
+            <span>Balans: <span id="my-rank-bal">0</span> $PLSR</span>
           </div>
         </div>
       </section>
 
-      <!-- 7. PROFIL, P2P & LIVE CHAT SCREEN -->
+      <!-- 7. PROFIL, P2P & CHAT -->
       <section id="tab-profil" class="screen-tab">
         <div class="profile-card">
           <div class="profile-avatar-wrap">
@@ -257,9 +221,7 @@
             <i class="fa-solid fa-gem"></i> <span id="prof-gems">0</span> Quasar Kristallari
           </div>
         </div>
-
         <div class="profile-menu">
-          <!-- P2P Transfer Item -->
           <div class="menu-item" onclick="openModal('p2p-modal')">
             <div class="menu-icon icon-blue"><i class="fa-solid fa-money-bill-transfer"></i></div>
             <div class="menu-text">
@@ -268,8 +230,6 @@
             </div>
             <i class="fa-solid fa-chevron-right arrow"></i>
           </div>
-
-          <!-- Tanga Exchange Item -->
           <div class="menu-item" onclick="openModal('exchange-modal')">
             <div class="menu-icon icon-purple"><i class="fa-solid fa-arrow-right-arrow-left"></i></div>
             <div class="menu-text">
@@ -278,8 +238,6 @@
             </div>
             <i class="fa-solid fa-chevron-right arrow"></i>
           </div>
-
-          <!-- Promo Kod Item -->
           <div class="menu-item" onclick="openModal('promo-modal')">
             <div class="menu-icon icon-gold"><i class="fa-solid fa-ticket"></i></div>
             <div class="menu-text">
@@ -288,8 +246,6 @@
             </div>
             <i class="fa-solid fa-chevron-right arrow"></i>
           </div>
-
-          <!-- Referral Item -->
           <div class="menu-item" onclick="openModal('ref-modal')">
             <div class="menu-icon icon-green"><i class="fa-solid fa-user-plus"></i></div>
             <div class="menu-text">
@@ -298,8 +254,6 @@
             </div>
             <i class="fa-solid fa-chevron-right arrow"></i>
           </div>
-
-          <!-- Global Chat Toggle -->
           <div class="menu-item" onclick="openModal('chat-modal')">
             <div class="menu-icon icon-pink"><i class="fa-solid fa-comments"></i></div>
             <div class="menu-text">
@@ -313,7 +267,6 @@
     </main>
 
     <!-- Modals -->
-    <!-- 1. P2P Modal -->
     <div id="p2p-modal" class="modal-overlay">
       <div class="modal-window">
         <div class="modal-header">
@@ -322,7 +275,7 @@
         </div>
         <div class="modal-body">
           <label>Qabul qiluvchi (ID yoki Username):</label>
-          <input type="text" id="p2p-target" placeholder="@username yoki ID">
+          <input type="text" id="p2p-target" placeholder="@username yoki Telegram ID">
           <label>Quasar kristallari miqdori:</label>
           <input type="number" id="p2p-amount" min="1" placeholder="Masalan: 5">
           <button class="btn-primary" onclick="handleP2PTransfer()">O'tkazish</button>
@@ -330,7 +283,6 @@
       </div>
     </div>
 
-    <!-- 2. Exchange Modal -->
     <div id="exchange-modal" class="modal-overlay">
       <div class="modal-window">
         <div class="modal-header">
@@ -350,7 +302,6 @@
       </div>
     </div>
 
-    <!-- 3. Promo Modal -->
     <div id="promo-modal" class="modal-overlay">
       <div class="modal-window">
         <div class="modal-header">
@@ -365,7 +316,6 @@
       </div>
     </div>
 
-    <!-- 4. Ref Modal -->
     <div id="ref-modal" class="modal-overlay">
       <div class="modal-window">
         <div class="modal-header">
@@ -375,7 +325,7 @@
         <div class="modal-body">
           <p>Har bir taklif qilingan do'stingiz uchun <strong>+5,000 $PLSR</strong> va Premium do'st uchun <strong>+15,000 $PLSR</strong> olasiz!</p>
           <div class="ref-link-box">
-            <input type="text" id="ref-link-val" value="https://t.me/PulsarTapBot?start=ref_123456" readonly>
+            <input type="text" id="ref-link-val" value="https://t.me/PulsarTapBot?start=ref_0" readonly>
             <button class="btn-sm" onclick="copyRefLink()"><i class="fa-solid fa-copy"></i> Nusxa</button>
           </div>
           <button class="btn-primary" onclick="shareRefLink()"><i class="fa-solid fa-paper-plane"></i> Telegramda Ulashish</button>
@@ -383,7 +333,6 @@
       </div>
     </div>
 
-    <!-- 5. Global Chat Modal -->
     <div id="chat-modal" class="modal-overlay">
       <div class="modal-window chat-window">
         <div class="modal-header">
@@ -391,14 +340,7 @@
           <button class="close-btn" onclick="closeModal('chat-modal')">&times;</button>
         </div>
         <div class="chat-messages" id="chat-stream">
-          <div class="chat-bubble">
-            <span class="chat-user">⚡ @CosmoMiner:</span>
-            <span class="chat-text">Hammaga salom! Yangi airdrop qachon ekan?</span>
-          </div>
-          <div class="chat-bubble">
-            <span class="chat-user">🚀 @AstroStar:</span>
-            <span class="chat-text">10 kundan keyin taqsimot bo'ladi! $PLSR to'playapmiz 🔥</span>
-          </div>
+          <div style="text-align:center;color:var(--text-muted);padding:20px;">Xabarlar yuklanmoqda...</div>
         </div>
         <div class="chat-input-bar">
           <input type="text" id="chat-msg-input" placeholder="Xabar yozing..." onkeypress="if(event.key==='Enter') sendChatMsg()">
@@ -410,37 +352,28 @@
     <!-- Bottom Navigation Bar -->
     <nav class="bottom-nav">
       <div class="nav-btn active" onclick="switchTab('asosiy')">
-        <i class="fa-solid fa-hand-pointer"></i>
-        <span>Asosiy</span>
+        <i class="fa-solid fa-hand-pointer"></i><span>Asosiy</span>
       </div>
       <div class="nav-btn" onclick="switchTab('dokan')">
-        <i class="fa-solid fa-store"></i>
-        <span>Do'kon</span>
+        <i class="fa-solid fa-store"></i><span>Do'kon</span>
       </div>
       <div class="nav-btn" onclick="switchTab('vazifalar')">
-        <i class="fa-solid fa-list-check"></i>
-        <span>Vazifalar</span>
+        <i class="fa-solid fa-list-check"></i><span>Vazifalar</span>
       </div>
       <div class="nav-btn" onclick="switchTab('minigames')">
-        <i class="fa-solid fa-gamepad"></i>
-        <span>Mini Games</span>
+        <i class="fa-solid fa-gamepad"></i><span>Mini Games</span>
       </div>
       <div class="nav-btn" onclick="switchTab('spin')">
-        <i class="fa-solid fa-dharmachakra"></i>
-        <span>Spin</span>
+        <i class="fa-solid fa-dharmachakra"></i><span>Spin</span>
       </div>
       <div class="nav-btn" onclick="switchTab('reyting')">
-        <i class="fa-solid fa-trophy"></i>
-        <span>Reyting</span>
+        <i class="fa-solid fa-trophy"></i><span>Reyting</span>
       </div>
       <div class="nav-btn" onclick="switchTab('profil')">
-        <i class="fa-solid fa-user"></i>
-        <span>Profil</span>
+        <i class="fa-solid fa-user"></i><span>Profil</span>
       </div>
     </nav>
   </div>
-
-  <!-- Scripts -->
   <script src="app.js"></script>
 </body>
 </html>
