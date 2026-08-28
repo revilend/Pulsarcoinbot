@@ -1,0 +1,32 @@
+[build]
+  # Faqat public papkadagi fayllarni deploy qilish
+  publish = "public"
+  # Build kerak emas
+  command = "echo 'Static deploy'"
+
+# Python fayllarni inkor qilish
+[[redirects]]
+  from = "/*.py"
+  to = "/404"
+  status = 404
+
+# Bot fayllarini inkor qilish
+[[redirects]]
+  from = "/bot.py"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/admin.py"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/database.py"
+  to = "/404"
+  status = 404
+
+[[redirects]]
+  from = "/config.py"
+  to = "/404"
+  status = 404
