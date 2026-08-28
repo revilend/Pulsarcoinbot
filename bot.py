@@ -24,15 +24,25 @@ dp.include_router(admin_router)
 async def handle_ping(request):
     return web.Response(text="Pulsar Bot is running alive!", status=200)
 
+async def handle_index(request):
+    index_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
+    if os.path.exists(index_path):
+        return web.FileResponse(index_path)
+    return web.Response(text="Pulsar Bot is running alive!", status=200)
+
 async def start_web_server():
     app = web.Application()
-    app.router.add_get("/", handle_ping)
-    app.router.add_get("/ping", handle_ping)
     
     # Webapp fayllarini xizmat qilish
-    webapp_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)))
-    if os.path.exists(os.path.join(webapp_dir, "index.html")):
-        app.router.add_static("/", webapp_dir, show_index=True, name="webapp")
+    webapp_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Static fayllar (css, js, va h.k.)
+    app.router.add_static("/css/", webapp_dir, name="css")
+    app.router.add_static("/js/", webapp_dir, name="js")
+    
+    # Asosiy route-lar
+    app.router.add_get("/ping", handle_ping)
+    app.router.add_get("/", handle_index)
     
     port = int(os.environ.get("PORT", 8080))
     runner = web.AppRunner(app)
