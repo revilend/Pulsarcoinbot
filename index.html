@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Pulsar Tap-to-Earn</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', Roboto, sans-serif; }
+    body { background: radial-gradient(circle at center, #1b1035, #0a0618); color: #fff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    header { padding: 16px; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .user-pill { display: flex; align-items: center; gap: 8px; font-weight: bold; font-size: 14px; }
+    .balance-badge { background: linear-gradient(135deg, #ff007a, #7928ca); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+    
+    .stats-container { text-align: center; margin-top: 15px; }
+    .balance-title { font-size: 12px; color: #a19bb6; text-transform: uppercase; letter-spacing: 1px; }
+    .balance-val { font-size: 38px; font-weight: 800; color: #00f2fe; text-shadow: 0 0 20px rgba(0,242,254,0.6); margin: 4px 0; }
+    .combo-badge { display: inline-block; background: rgba(0, 242, 254, 0.1); border: 1px solid #00f2fe; color: #00f2fe; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: bold; }
+
+    .tap-area { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; }
+    .pulsar-core {
+      width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, #00f2fe 10%, #7928ca 50%, #ff007a 90%);
+      box-shadow: 0 0 50px rgba(0,242,254,0.5), 0 0 80px rgba(121,40,202,0.4);
+      display: flex; justify-content: center; align-items: center;
+      cursor: pointer; transition: transform 0.1s ease;
+    }
+    .pulsar-core:active { transform: scale(0.94); }
+    .core-inner { width: 170px; height: 170px; border-radius: 50%; background: #0c0822; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid rgba(255,255,255,0.2); }
+    .core-symbol { font-size: 50px; font-weight: 900; background: linear-gradient(135deg, #00f2fe, #ff007a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .floating-text { position: absolute; color: #00f2fe; font-size: 24px; font-weight: bold; pointer-events: none; animation: floatUp 0.8s forwards ease-out; }
+    @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-70px) scale(1.3); } }
+
+    .footer-bar { padding: 16px; background: rgba(12,8,34,0.9); }
+    .energy-bar-wrap { height: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 6px; }
+    .energy-bar-fill { height: 100%; width: 100%; background: linear-gradient(90deg, #00f2fe, #4facfe); transition: width 0.2s; }
+    .energy-info { display: flex; justify-content: space-between; font-size: 12px; color: #a19bb6; }
+
+    nav { display: flex; justify-content: space-around; background: #080514; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.06); }
+    .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: #7f7899; cursor: pointer; }
+    .nav-item.active { color: #00f2fe; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="user-pill" id="user-info">⚡ @Player</div>
+    <div class="balance-badge">💎 <span id="gems-val">0</span> Quasar</div>
+  </header>
+
+  <div class="stats-container">
+    <div class="balance-title">JORIY BALANS</div>
+    <div class="balance-val" id="balance">500</div>
+    <div class="combo-badge" id="combo">🔥 COMBO: x1.0</div>
+  </div>
+
+  <div class="tap-area" id="tap-zone">
+    <div class="pulsar-core" id="core">
+      <div class="core-inner">
+        <div class="core-symbol">P</div>
+        <div style="font-size: 11px; color: #a19bb6; margin-top: 4px;">PULSAR CORE</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <div class="energy-bar-wrap">
+      <div class="energy-bar-fill" id="energy-fill"></div>
+    </div>
+    <div class="energy-info">
+      <span>⚡ Energiya</span>
+      <span><strong id="energy-val">100</strong> / 100</span>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-item active">🏠 Asosiy</div>
+    <div class="nav-item">🛒 Do'kon</div>
+    <div class="nav-item">📋 Vazifalar</div>
+    <div class="nav-item">🎡 Spin</div>
+    <div class="nav-item">🏆 Reyting</div>
+    <div class="nav-item">👤 Profil</div>
+  </nav>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.expand(); }
+
+    let balance = 500;
+    let energy = 100;
+    const maxEnergy = 100;
+    let comboCount = 0;
+    let comboMultiplier = 1;
+
+    const balanceEl = document.getElementById('balance');
+    const energyValEl = document.getElementById('energy-val');
+    const energyFillEl = document.getElementById('energy-fill');
+    const comboEl = document.getElementById('combo');
+    const coreEl = document.getElementById('core');
+    const tapZone = document.getElementById('tap-zone');
+
+    if (tg?.initDataUnsafe?.user) {
+      document.getElementById('user-info').innerText = '⚡ @' + (tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name);
+    }
+
+    coreEl.addEventListener('pointerdown', (e) => {
+      if (energy <= 0) return;
+
+      energy--;
+      comboCount++;
+      comboMultiplier = comboCount > 30 ? 3 : (comboCount > 15 ? 2 : 1);
+      
+      const earned = 1 * comboMultiplier;
+      balance += earned;
+
+      balanceEl.innerText = balance.toLocaleString();
+      energyValEl.innerText = energy;
+      energyFillEl.style.width = (energy / maxEnergy * 100) + '%';
+      comboEl.innerText = `🔥 COMBO: x${comboMultiplier}.0`;
+
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('medium');
+      }
+
+      // Animatsiya
+      const plusText = document.createElement('div');
+      plusText.className = 'floating-text';
+      plusText.innerText = `+${earned}`;
+      plusText.style.left = `${e.clientX - 20}px`;
+      plusText.style.top = `${e.clientY - 60}px`;
+      document.body.appendChild(plusText);
+
+      setTimeout(() => plusText.remove(), 800);
+    });
+
+    // Energiya tiklanishi (har 2 soniyada +1)
+    setInterval(() => {
+      if (energy < maxEnergy) {
+        energy++;
+        energyValEl.innerText = energy;
+        energyFillEl.style.width = (energy / maxEnergy * 100) + '%';
+      }
+    }, 2000);
+  </script>
+</body>
+</html>
